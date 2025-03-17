@@ -57,15 +57,24 @@ import { useRouter } from 'vue-router'
 
 const router = useRouter()
 
-router.push('/login')
+// 頁面加載時重定向到登入頁面
+onMounted(() => {
+  navigateTo('/login');
+});
+
+// 或者使用 Nuxt 的中間件進行重定向
+definePageMeta({
+  middleware: [
+    function() {
+      return navigateTo('/login');
+    }
+  ]
+});
 </script>
 
 <template>
    <div>
-    <!-- Add a link to the login page -->
-    <!-- <nav>
-      <a href="/login">Login</a>
-    </nav> -->
-    <!-- ...existing code... -->
+    <!-- 此頁面不會顯示，因為它會立即重定向 -->
+    <p>正在導向登入頁面...</p>
   </div>
 </template>
