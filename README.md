@@ -26,10 +26,6 @@ Make sure to install the dependencies:
 git clone https://github.com/Ray053/UnityDanceSystem.git
 cd UnityDanceSystem
 
-## Development Server
-
-Start the development server on `http://localhost:3000`:
-
 # pnpm
 pnpm run dev
 
