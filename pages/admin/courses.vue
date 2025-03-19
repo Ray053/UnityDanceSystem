@@ -1,371 +1,618 @@
-<template>
-    <div class="courses-page">
-      <div class="page-header">
-        <div class="search-filter">
-          <div class="search-box">
-            <Search class="search-icon" />
-            <input 
-              type="text" 
-              placeholder="搜尋課程..." 
-              v-model="searchText"
-              class="search-input"
-            />
-          </div>
-          <div class="filters">
-            <Select v-model="selectedCategory">
-              <SelectTrigger class="filter-select">
-                <SelectValue placeholder="課程類別" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">全部類別</SelectItem>
-                <SelectItem value="dance">舞蹈</SelectItem>
-                <SelectItem value="fitness">健身</SelectItem>
-                <SelectItem value="yoga">瑜伽</SelectItem>
-                <SelectItem value="martial-arts">武術</SelectItem>
-              </SelectContent>
-            </Select>
-            
-            <Select v-model="selectedLevel">
-              <SelectTrigger class="filter-select">
-                <SelectValue placeholder="難度等級" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">全部等級</SelectItem>
-                <SelectItem value="beginner">初學者</SelectItem>
-                <SelectItem value="intermediate">中級</SelectItem>
-                <SelectItem value="advanced">高級</SelectItem>
-              </SelectContent>
-            </Select>
-            
-            <Select v-model="sortOption">
-              <SelectTrigger class="filter-select">
-                <SelectValue placeholder="排序方式" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="newest">最新上架</SelectItem>
-                <SelectItem value="popular">最受歡迎</SelectItem>
-                <SelectItem value="name-asc">名稱 A-Z</SelectItem>
-                <SelectItem value="name-desc">名稱 Z-A</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-        </div>
-        
-        <Button class="add-course-btn">
-          <Plus class="btn-icon" />
-          新增課程
-        </Button>
-      </div>
-      
-      <div class="courses-grid">
-        <Card v-for="course in filteredCourses" :key="course.id" class="course-card">
-          <div class="course-image-container">
-            <img :src="course.thumbnail" :alt="course.title" class="course-image" />
-            <div class="course-level" :class="course.level">
-              {{ getLevelText(course.level) }}
-            </div>
-          </div>
-          
-          <CardHeader>
-            <CardTitle>{{ course.title }}</CardTitle>
-            <CardDescription>{{ course.instructor }}</CardDescription>
-          </CardHeader>
-          
-          <CardContent>
-            <p class="course-description">{{ course.description }}</p>
-            <div class="course-meta">
-              <div class="meta-item">
-                <Clock class="meta-icon" />
-                <span>{{ course.duration }}</span>
+.sidebar.open ~ .main-content {
+  padding-left: 264px; /* 240px navbar width + 24px padding */
+}<template>
+  <div class="courses-container">
+    <!-- Unity Background (This would be your Unity WebGL canvas) -->
+    <div class="unity-background">
+      <!-- Unity canvas would be mounted here -->
+    </div>
+
+    <!-- Glass Container for All Content -->
+    <div class="glass-container">
+      <div class="content-wrapper">
+        <!-- Side Navigation -->
+        <div class="sidebar" :class="{ 'open': !isSidebarCollapsed }">
+          <div class="navbar">
+            <div class="navbar-inner">
+              <div class="sidebar-header">
+                <button class="menu-btn" @click="toggleSidebar">
+                  <div class="hamburger" :class="{ 'active': !isSidebarCollapsed }">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                  </div>
+                </button>
+                <div class="logo">課程平台</div>
               </div>
-              <div class="meta-item">
-                <Users class="meta-icon" />
-                <span>{{ course.studentsCount }}+ 學生</span>
+              
+              <div class="menu">
+                <div class="menu-item" :class="{ 'active': activeMenu === 'courses' }" @click="setActiveMenu('courses')">
+                  <div class="menu-item-inner">
+                    <BookOpen class="menu-icon" />
+                    <span class="menu-title">課程介紹</span>
+                  </div>
+                </div>
+                
+                <div class="menu-item" :class="{ 'active': activeMenu === 'history' }" @click="setActiveMenu('history')">
+                  <div class="menu-item-inner">
+                    <History class="menu-icon" />
+                    <span class="menu-title">學習歷程</span>
+                  </div>
+                </div>
+                
+                <div class="menu-item" :class="{ 'active': activeMenu === 'analysis' }" @click="setActiveMenu('analysis')">
+                  <div class="menu-item-inner">
+                    <Activity class="menu-icon" />
+                    <span class="menu-title">動作分析</span>
+                  </div>
+                </div>
+                
+                <div class="menu-item" :class="{ 'active': activeMenu === 'user' }" @click="setActiveMenu('user')">
+                  <div class="menu-item-inner">
+                    <User class="menu-icon" />
+                    <span class="menu-title">用戶管理</span>
+                  </div>
+                </div>
               </div>
             </div>
-          </CardContent>
-          
-          <CardFooter>
-            <div class="course-tags">
-              <Badge v-for="tag in course.tags" :key="tag" variant="secondary" class="course-tag">
-                {{ tag }}
-              </Badge>
-            </div>
-            <div class="card-actions">
-              <Button variant="ghost" size="sm">
-                <Pencil class="action-icon" />
-                編輯
-              </Button>
-              <Button variant="ghost" size="sm">
-                <Eye class="action-icon" />
-                預覽
-              </Button>
-            </div>
-          </CardFooter>
-        </Card>
-      </div>
-      
-      <div v-if="filteredCourses.length === 0" class="no-courses">
-        <div class="empty-state">
-          <DatabaseIcon class="empty-icon" />
-          <h3>找不到課程</h3>
-          <p>沒有符合搜尋條件的課程。嘗試調整過濾條件或清除搜尋。</p>
-          <Button @click="resetFilters">清除所有過濾</Button>
+          </div>
         </div>
-      </div>
-      
-      <div class="pagination">
-        <Button variant="outline" size="sm" class="pagination-btn" :disabled="currentPage === 1" @click="currentPage--">
-          <ChevronLeft class="pagination-icon" />
-          上一頁
-        </Button>
-        <span class="page-info">第 {{ currentPage }} 頁，共 {{ totalPages }} 頁</span>
-        <Button variant="outline" size="sm" class="pagination-btn" :disabled="currentPage === totalPages" @click="currentPage++">
-          下一頁
-          <ChevronRight class="pagination-icon" />
-        </Button>
+
+        <!-- Main Content Area -->
+        <div class="main-content">
+          <div class="content-header">
+            <h1 class="content-title">課程介紹</h1>
+            <p class="content-description">探索各種運動課程並開始您的學習之旅</p>
+          </div>
+          
+          <!-- Search and Filter Section -->
+          <div class="search-filter">
+            <div class="search-box">
+              <Search class="search-icon" />
+              <Input 
+                placeholder="搜尋課程..." 
+                v-model="searchText"
+                class="search-input"
+              />
+            </div>
+            <div class="filters">
+              <Select v-model="selectedCategory">
+                <SelectTrigger class="filter-select">
+                  <SelectValue placeholder="課程類別" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">全部類別</SelectItem>
+                  <SelectItem value="dance">舞蹈</SelectItem>
+                  <SelectItem value="fitness">健身</SelectItem>
+                  <SelectItem value="yoga">瑜伽</SelectItem>
+                  <SelectItem value="martial-arts">武術</SelectItem>
+                </SelectContent>
+              </Select>
+              
+              <Select v-model="selectedLevel">
+                <SelectTrigger class="filter-select">
+                  <SelectValue placeholder="難度等級" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">全部等級</SelectItem>
+                  <SelectItem value="beginner">初學者</SelectItem>
+                  <SelectItem value="intermediate">中級</SelectItem>
+                  <SelectItem value="advanced">高級</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+
+          <!-- Course Grid -->
+          <div class="courses-grid">
+            <Card v-for="course in courses" :key="course.id" class="course-card">
+              <div class="course-image-container">
+                <img :src="course.thumbnail" :alt="course.title" class="course-image" />
+                <Badge class="course-level" :variant="getLevelVariant(course.level)">
+                  {{ getLevelText(course.level) }}
+                </Badge>
+              </div>
+              
+              <CardContent>
+                <h3 class="course-title">{{ course.title }}</h3>
+                <p class="course-instructor">{{ course.instructor }}</p>
+                <p class="course-description">{{ course.description }}</p>
+                <div class="course-meta">
+                  <div class="meta-item">
+                    <Clock class="meta-icon" />
+                    <span>{{ course.duration }}</span>
+                  </div>
+                  <div class="meta-item">
+                    <Users class="meta-icon" />
+                    <span>{{ course.studentsCount }}+ 學生</span>
+                  </div>
+                </div>
+              </CardContent>
+              
+              <CardFooter>
+                <Button class="enroll-btn">開始學習</Button>
+              </CardFooter>
+            </Card>
+          </div>
+        </div>
       </div>
     </div>
-  </template>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { ref } from 'vue'
+import { 
+  Search, 
+  BookOpen,
+  History, 
+  Activity,
+  User,
+  Clock, 
+  Users
+} from 'lucide-vue-next'
+
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
+import { Badge } from '@/components/ui/badge'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+
+// Sidebar state
+const isSidebarCollapsed = ref(true)
+const activeMenu = ref('courses')
+
+const toggleSidebar = () => {
+  isSidebarCollapsed.value = !isSidebarCollapsed.value
+}
+
+const setActiveMenu = (menu: string) => {
+  activeMenu.value = menu
+}
+
+// Course filtering
+const searchText = ref('')
+const selectedCategory = ref('all')
+const selectedLevel = ref('all')
+
+// Sample courses data
+const courses = ref([
+  {
+    id: 1,
+    title: '現代舞入門基礎',
+    description: '適合初學者的現代舞入門課程，學習基本姿勢、動作和表現技巧。',
+    instructor: '李明儀 講師',
+    level: 'beginner',
+    category: 'dance',
+    duration: '8 小時',
+    studentsCount: 152,
+    thumbnail: 'https://images.unsplash.com/photo-1535525153412-5a42439a210d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80',
+  },
+  {
+    id: 2,
+    title: '芭蕾基礎技巧',
+    description: '學習芭蕾舞的五個基本位置和手位，培養優雅的姿態和平衡感。',
+    instructor: '王美玲 講師',
+    level: 'beginner',
+    category: 'dance',
+    duration: '10 小時',
+    studentsCount: 98,
+    thumbnail: 'https://images.unsplash.com/photo-1546483875-ad9014c88eba?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1508&q=80',
+  },
+  {
+    id: 3,
+    title: '瑜伽與身心平衡',
+    description: '結合呼吸與體位法，提升身體柔軟度和心靈平靜。',
+    instructor: '林靜怡 講師',
+    level: 'beginner',
+    category: 'yoga',
+    duration: '6 小時',
+    studentsCount: 215,
+    thumbnail: 'https://images.unsplash.com/photo-1575052814086-f385e2e2ad1b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80',
+  },
+  {
+    id: 4,
+    title: '功能性健身訓練',
+    description: '透過多關節運動提升日常生活中的身體功能和表現。',
+    instructor: '張健銘 講師',
+    level: 'intermediate',
+    category: 'fitness',
+    duration: '9 小時',
+    studentsCount: 132,
+    thumbnail: 'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80',
+  },
+])
+
+// Helper functions
+const getLevelText = (level: string) => {
+  switch (level) {
+    case 'beginner': return '入門'
+    case 'intermediate': return '中級'
+    case 'advanced': return '高級'
+    default: return '全部等級'
+  }
+}
+
+const getLevelVariant = (level: string) => {
+  switch (level) {
+    case 'beginner': return 'default'
+    case 'intermediate': return 'secondary'
+    case 'advanced': return 'destructive'
+    default: return 'outline'
+  }
+}
+</script>
+
+<style scoped>
+.courses-container {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 24px;
+  box-sizing: border-box;
+}
+
+.unity-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  background-color: #1a1a2e; /* Fallback if Unity not loaded */
+}
+
+/* Glass Container for All Content */
+.glass-container {
+  width: calc(100% - 48px);
+  height: calc(100vh - 48px);
+  margin: 0 auto;
+  background: linear-gradient(116deg, rgba(255, 255, 255, 0.2) 33.48%, rgba(153, 153, 153, 0.2) 96.52%);
+  backdrop-filter: blur(10px);
+  border-radius: 12px;
+  box-shadow: 0px 0px 20px 0px rgba(255, 255, 255, 0.5) inset;
+  position: relative;
+  z-index: 1;
+  display: flex;
+  overflow: hidden;
+  max-width: 1872px; /* Allows for very large screens while maintaining some padding */
+}
+
+.content-wrapper {
+  display: flex;
+  width: 100%;
+  height: 100%;
+}
+
+/* Sidebar Styles */
+.sidebar {
+  height: 100%;
+  z-index: 10;
+}
+
+.navbar {
+  height: 100%;
+  background: rgba(26, 26, 46, 0.9);
+  overflow: hidden;
+  transition: width 0.3s ease;
+  width: 52px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 20;
+}
+
+.sidebar.open .navbar {
+  width: 240px;
+}
+
+.navbar-inner {
+  position: relative;
+  height: 100%;
+  width: 240px;
+  overflow: hidden;
+}
+
+.sidebar-header {
+  height: 60px;
+  display: flex;
+  align-items: center;
+  width: 240px;
+  padding: 0 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.menu-btn {
+  width: 30px;
+  height: 30px;
+  background: transparent;
+  border: none;
+  color: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+.hamburger {
+  width: 20px;
+  height: 20px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: transform 0.3s ease;
+}
+
+.hamburger span {
+  display: block;
+  height: 2px;
+  width: 100%;
+  background-color: white;
+  border-radius: 2px;
+  transition: all 0.3s ease-in-out;
+  transform-origin: center;
+}
+
+.hamburger.active span:nth-child(1) {
+  transform: translateY(9px) rotate(45deg);
+}
+
+.hamburger.active span:nth-child(2) {
+  opacity: 0;
+}
+
+.hamburger.active span:nth-child(3) {
+  transform: translateY(-9px) rotate(-45deg);
+}
+
+.logo {
+  color: white;
+  font-weight: 600;
+  margin-left: 15px;
+  font-size: 16px;
+  white-space: nowrap;
+}
+
+.menu {
+  width: 240px;
+  padding: 10px 0;
+}
+
+.menu-item {
+  position: relative;
+  width: 240px;
+  cursor: pointer;
+}
+
+.menu-item.active {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.menu-item-inner {
+  padding: 15px 16px;
+  display: flex;
+  align-items: center;
+  width: 240px;
+  box-sizing: border-box;
+}
+
+.menu-icon {
+  width: 20px;
+  height: 20px;
+  color: white;
+  flex-shrink: 0;
+}
+
+.menu-title {
+  margin-left: 15px;
+  color: white;
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+.menu-item:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+/* Main Content Styles */
+.main-content {
+  flex: 1;
+  padding: 24px;
+  overflow-y: auto;
+  height: 100%;
+}
+
+/* Content Header */
+.content-header {
+  margin-bottom: 24px;
+}
+
+.content-title {
+  font-size: 24px;
+  font-weight: 600;
+  color: #fff;
+  margin-bottom: 8px;
+}
+
+.content-description {
+  font-size: 16px;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* Search and Filter Section */
+.search-filter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.search-box {
+  position: relative;
+  flex: 1;
+  min-width: 200px;
+}
+
+.search-icon {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #6b7280;
+  width: 18px;
+  height: 18px;
+}
+
+.search-input {
+  padding-left: 36px;
+}
+
+.filters {
+  display: flex;
+  gap: 12px;
+}
+
+.filter-select {
+  min-width: 140px;
+}
+
+/* Course Grid */
+.courses-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 24px;
+  margin-top: 24px;
+}
+
+.course-card {
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(5px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.course-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+.course-image-container {
+  position: relative;
+  height: 160px;
+  overflow: hidden;
+}
+
+.course-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.course-card:hover .course-image {
+  transform: scale(1.05);
+}
+
+.course-level {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+
+.course-title {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 4px;
+  color: #fff;
+}
+
+.course-instructor {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.8);
+  margin-bottom: 12px;
+}
+
+.course-description {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 16px;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.course-meta {
+  display: flex;
+  gap: 16px;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.meta-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.meta-icon {
+  width: 16px;
+  height: 16px;
+}
+
+.enroll-btn {
+  width: 100%;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 1200px) {
+  .glass-container {
+    width: 95%;
+    height: 90vh;
+  }
+}
+
+@media (max-width: 768px) {
+  .content-wrapper {
+    flex-direction: column;
+  }
   
-  <script setup lang="ts">
-  import { ref, computed } from 'vue';
-  import { 
-    Search, 
-    Clock, 
-    Users, 
-    Plus, 
-    Pencil, 
-    Eye, 
-    ChevronLeft, 
-    ChevronRight 
-  } from 'lucide-vue-next';
-  import { Database as DatabaseIcon } from 'lucide-vue-next';
-  import { 
-    Card, 
-    CardHeader, 
-    CardTitle, 
-    CardDescription, 
-    CardContent, 
-    CardFooter 
-  } from '@/components/ui/card';
-  import { 
-    Select, 
-    SelectContent, 
-    SelectItem, 
-    SelectTrigger, 
-    SelectValue 
-  } from '@/components/ui/select';
-  import { Button } from '@/components/ui/button';
-  import { Badge } from '@/components/ui/badge';
+  .navbar {
+    width: 100%;
+    height: 60px;
+  }
   
-  // 過濾選項
-  const searchText = ref('');
-  const selectedCategory = ref('all');
-  const selectedLevel = ref('all');
-  const sortOption = ref('newest');
-  const currentPage = ref(1);
-  const itemsPerPage = 8;
+  .sidebar.open .navbar {
+    height: auto;
+  }
   
-  // 課程數據
-  const courses = ref([
-    {
-      id: 1,
-      title: '現代舞入門基礎',
-      description: '適合初學者的現代舞入門課程，學習基本姿勢、動作和表現技巧。',
-      instructor: '李明儀 講師',
-      level: 'beginner',
-      category: 'dance',
-      duration: '8 小時',
-      studentsCount: 152,
-      tags: ['現代舞', '基礎', '表演藝術'],
-      thumbnail: 'https://images.unsplash.com/photo-1535525153412-5a42439a210d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80',
-      createdAt: '2023-08-15'
-    },
-    {
-      id: 2,
-      title: '芭蕾基礎技巧',
-      description: '學習芭蕾舞的五個基本位置和手位，培養優雅的姿態和平衡感。',
-      instructor: '王美玲 講師',
-      level: 'beginner',
-      category: 'dance',
-      duration: '10 小時',
-      studentsCount: 98,
-      tags: ['芭蕾', '姿態', '基礎'],
-      thumbnail: 'https://images.unsplash.com/photo-1546483875-ad9014c88eba?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1508&q=80',
-      createdAt: '2023-07-20'
-    },
-    {
-      id: 3,
-      title: '嘻哈舞步進階',
-      description: '適合已有嘻哈舞基礎的學生，學習更複雜的動作和組合。',
-      instructor: '陳志豪 講師',
-      level: 'intermediate',
-      category: 'dance',
-      duration: '12 小時',
-      studentsCount: 78,
-      tags: ['嘻哈', '街舞', '進階'],
-      thumbnail: 'https://images.unsplash.com/photo-1604382354936-07c5d9983bd3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80',
-      createdAt: '2023-09-05'
-    },
-    {
-      id: 4,
-      title: '瑜伽與身心平衡',
-      description: '結合呼吸與體位法，提升身體柔軟度和心靈平靜。',
-      instructor: '林靜怡 講師',
-      level: 'beginner',
-      category: 'yoga',
-      duration: '6 小時',
-      studentsCount: 215,
-      tags: ['瑜伽', '冥想', '健康'],
-      thumbnail: 'https://images.unsplash.com/photo-1575052814086-f385e2e2ad1b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80',
-      createdAt: '2023-06-30'
-    },
-    {
-      id: 5,
-      title: '功能性健身訓練',
-      description: '透過多關節運動提升日常生活中的身體功能和表現。',
-      instructor: '張健銘 講師',
-      level: 'intermediate',
-      category: 'fitness',
-      duration: '9 小時',
-      studentsCount: 132,
-      tags: ['健身', '功能性', '肌力'],
-      thumbnail: 'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80',
-      createdAt: '2023-08-22'
-    },
-    {
-      id: 6,
-      title: '太極拳基礎',
-      description: '學習太極拳的基本動作和呼吸技巧，提升身體協調性和平衡感。',
-      instructor: '吳大維 講師',
-      level: 'beginner',
-      category: 'martial-arts',
-      duration: '7 小時',
-      studentsCount: 65,
-      tags: ['太極', '武術', '平衡'],
-      thumbnail: 'https://images.unsplash.com/photo-1552058544-f2b08422138a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1398&q=80',
-      createdAt: '2023-07-10'
-    },
-    {
-      id: 7,
-      title: '拉丁舞專業課程',
-      description: '包含恰恰、倫巴、森巴等多種拉丁舞種，適合想挑戰自我的舞者。',
-      instructor: '孫美玲 講師',
-      level: 'advanced',
-      category: 'dance',
-      duration: '15 小時',
-      studentsCount: 42,
-      tags: ['拉丁舞', '專業', '表演'],
-      thumbnail: 'https://images.unsplash.com/photo-1504609813442-a9924e2e9c5c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80',
-      createdAt: '2023-09-15'
-    },
-    {
-      id: 8,
-      title: '高強度間歇訓練',
-      description: '透過短時間高強度運動提升心肺功能和燃燒脂肪。',
-      instructor: '黃偉誠 講師',
-      level: 'advanced',
-      category: 'fitness',
-      duration: '5 小時',
-      studentsCount: 187,
-      tags: ['HIIT', '燃脂', '心肺'],
-      thumbnail: 'https://images.unsplash.com/photo-1549060279-7e168fcee0c2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80',
-      createdAt: '2023-08-05'
-    },
-    {
-      id: 9,
-      title: '冥想與正念練習',
-      description: '學習各種冥想技巧，培養正念感知和壓力管理能力。',
-      instructor: '謝雅芳 講師',
-      level: 'beginner',
-      category: 'yoga',
-      duration: '4 小時',
-      studentsCount: 95,
-      tags: ['冥想', '正念', '壓力管理'],
-      thumbnail: 'https://images.unsplash.com/photo-1536623975707-c4b3b2af565d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80',
-      createdAt: '2023-07-25'
-    },
-    {
-      id: 10,
-      title: '武術與自我防衛',
-      description: '結合多種武術技巧，學習實用的自我防衛方法。',
-      instructor: '劉志強 講師',
-      level: 'intermediate',
-      category: 'martial-arts',
-      duration: '11 小時',
-      studentsCount: 74,
-      tags: ['武術', '自我防衛', '技巧'],
-      thumbnail: 'https://images.unsplash.com/photo-1531415074968-036ba1b575da?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1447&q=80',
-      createdAt: '2023-09-01'
-    }
-  ]);
+  .navbar-inner {
+    width: 100%;
+  }
   
-  // 過濾和排序課程
-  const filteredCourses = computed(() => {
-    // 應用過濾條件
-    let result = courses.value.filter(course => {
-      // 搜尋文字
-      const searchMatch = !searchText.value || 
-        course.title.toLowerCase().includes(searchText.value.toLowerCase()) ||
-        course.description.toLowerCase().includes(searchText.value.toLowerCase()) ||
-        course.instructor.toLowerCase().includes(searchText.value.toLowerCase());
-      
-      // 類別過濾
-      const categoryMatch = selectedCategory.value === 'all' || course.category === selectedCategory.value;
-      
-      // 難度過濾
-      const levelMatch = selectedLevel.value === 'all' || course.level === selectedLevel.value;
-      
-      return searchMatch && categoryMatch && levelMatch;
-    });
-    
-    // 應用排序
-    switch (sortOption.value) {
-      case 'newest':
-        result = result.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
-        break;
-      case 'popular':
-        result = result.sort((a, b) => b.studentsCount - a.studentsCount);
-        break;
-      case 'name-asc':
-        result = result.sort((a, b) => a.title.localeCompare(b.title));
-        break;
-      case 'name-desc':
-        result = result.sort((a, b) => b.title.localeCompare(a.title));
-        break;
-    }
-    
-    return result;
-  });
+  .sidebar-header {
+    width: 100%;
+  }
   
-  // 分頁計算
-  const totalItems = computed(() => filteredCourses.value.length);
-  const totalPages = computed(() => Math.ceil(totalItems.value / itemsPerPage));
-  const displayedCourses = computed(() => {
-    const start = (currentPage.value - 1) * itemsPerPage;
-    const end = start + itemsPerPage;
-    return filteredCourses.value.slice(start, end);
-  });
+  .menu-item {
+    width: 100%;
+  }
   
-  // 重置過濾器
-  const resetFilters = () => {
-    searchText.value = '';
-    selectedCategory.value = 'all';
-    selectedLevel.value = 'all';
-    sortOption.value = 'newest';
-    currentPage.value = 1;
-  };
+  .search-filter {
+    flex-direction: column;
+  }
   
-  // 轉換難度等級文字
-  const getLevelText = (level: string) => {
-    switch (level) {
-      case 'beginner': return '入門';
-      case 'intermediate': return '中級';
-      case 'advanced': return '高級';
-      default: return '全部等級';
-    }
-  };
-  </script>
-  
-  <style src="@/assets/css/courses.css"></style>
+  .courses-grid {
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  }
+}
+</style>

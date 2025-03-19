@@ -31,6 +31,12 @@ interface _GlobalComponents {
     'BreadcrumbList': typeof import("../components/ui/breadcrumb/index")['BreadcrumbList']
     'BreadcrumbPage': typeof import("../components/ui/breadcrumb/index")['BreadcrumbPage']
     'BreadcrumbSeparator': typeof import("../components/ui/breadcrumb/index")['BreadcrumbSeparator']
+    'Card': typeof import("../components/ui/card/index")['Card']
+    'CardHeader': typeof import("../components/ui/card/index")['CardHeader']
+    'CardTitle': typeof import("../components/ui/card/index")['CardTitle']
+    'CardDescription': typeof import("../components/ui/card/index")['CardDescription']
+    'CardContent': typeof import("../components/ui/card/index")['CardContent']
+    'CardFooter': typeof import("../components/ui/card/index")['CardFooter']
     'Button': typeof import("../components/ui/button/index")['Button']
     'DropdownMenuPortal': typeof import("../components/ui/dropdown-menu/index")['DropdownMenuPortal']
     'DropdownMenu': typeof import("../components/ui/dropdown-menu/index")['DropdownMenu']
@@ -47,12 +53,6 @@ interface _GlobalComponents {
     'DropdownMenuSub': typeof import("../components/ui/dropdown-menu/index")['DropdownMenuSub']
     'DropdownMenuSubTrigger': typeof import("../components/ui/dropdown-menu/index")['DropdownMenuSubTrigger']
     'DropdownMenuSubContent': typeof import("../components/ui/dropdown-menu/index")['DropdownMenuSubContent']
-    'Card': typeof import("../components/ui/card/index")['Card']
-    'CardHeader': typeof import("../components/ui/card/index")['CardHeader']
-    'CardTitle': typeof import("../components/ui/card/index")['CardTitle']
-    'CardDescription': typeof import("../components/ui/card/index")['CardDescription']
-    'CardContent': typeof import("../components/ui/card/index")['CardContent']
-    'CardFooter': typeof import("../components/ui/card/index")['CardFooter']
     'Input': typeof import("../components/ui/input/index")['Input']
     'Sheet': typeof import("../components/ui/sheet/index")['Sheet']
     'SheetTrigger': typeof import("../components/ui/sheet/index")['SheetTrigger']
@@ -121,6 +121,12 @@ interface _GlobalComponents {
     'LazyBreadcrumbList': LazyComponent<typeof import("../components/ui/breadcrumb/index")['BreadcrumbList']>
     'LazyBreadcrumbPage': LazyComponent<typeof import("../components/ui/breadcrumb/index")['BreadcrumbPage']>
     'LazyBreadcrumbSeparator': LazyComponent<typeof import("../components/ui/breadcrumb/index")['BreadcrumbSeparator']>
+    'LazyCard': LazyComponent<typeof import("../components/ui/card/index")['Card']>
+    'LazyCardHeader': LazyComponent<typeof import("../components/ui/card/index")['CardHeader']>
+    'LazyCardTitle': LazyComponent<typeof import("../components/ui/card/index")['CardTitle']>
+    'LazyCardDescription': LazyComponent<typeof import("../components/ui/card/index")['CardDescription']>
+    'LazyCardContent': LazyComponent<typeof import("../components/ui/card/index")['CardContent']>
+    'LazyCardFooter': LazyComponent<typeof import("../components/ui/card/index")['CardFooter']>
     'LazyButton': LazyComponent<typeof import("../components/ui/button/index")['Button']>
     'LazyDropdownMenuPortal': LazyComponent<typeof import("../components/ui/dropdown-menu/index")['DropdownMenuPortal']>
     'LazyDropdownMenu': LazyComponent<typeof import("../components/ui/dropdown-menu/index")['DropdownMenu']>
@@ -137,12 +143,6 @@ interface _GlobalComponents {
     'LazyDropdownMenuSub': LazyComponent<typeof import("../components/ui/dropdown-menu/index")['DropdownMenuSub']>
     'LazyDropdownMenuSubTrigger': LazyComponent<typeof import("../components/ui/dropdown-menu/index")['DropdownMenuSubTrigger']>
     'LazyDropdownMenuSubContent': LazyComponent<typeof import("../components/ui/dropdown-menu/index")['DropdownMenuSubContent']>
-    'LazyCard': LazyComponent<typeof import("../components/ui/card/index")['Card']>
-    'LazyCardHeader': LazyComponent<typeof import("../components/ui/card/index")['CardHeader']>
-    'LazyCardTitle': LazyComponent<typeof import("../components/ui/card/index")['CardTitle']>
-    'LazyCardDescription': LazyComponent<typeof import("../components/ui/card/index")['CardDescription']>
-    'LazyCardContent': LazyComponent<typeof import("../components/ui/card/index")['CardContent']>
-    'LazyCardFooter': LazyComponent<typeof import("../components/ui/card/index")['CardFooter']>
     'LazyInput': LazyComponent<typeof import("../components/ui/input/index")['Input']>
     'LazySheet': LazyComponent<typeof import("../components/ui/sheet/index")['Sheet']>
     'LazySheetTrigger': LazyComponent<typeof import("../components/ui/sheet/index")['SheetTrigger']>
@@ -217,6 +217,12 @@ export const BreadcrumbLink: typeof import("../components/ui/breadcrumb/index")[
 export const BreadcrumbList: typeof import("../components/ui/breadcrumb/index")['BreadcrumbList']
 export const BreadcrumbPage: typeof import("../components/ui/breadcrumb/index")['BreadcrumbPage']
 export const BreadcrumbSeparator: typeof import("../components/ui/breadcrumb/index")['BreadcrumbSeparator']
+export const Card: typeof import("../components/ui/card/index")['Card']
+export const CardHeader: typeof import("../components/ui/card/index")['CardHeader']
+export const CardTitle: typeof import("../components/ui/card/index")['CardTitle']
+export const CardDescription: typeof import("../components/ui/card/index")['CardDescription']
+export const CardContent: typeof import("../components/ui/card/index")['CardContent']
+export const CardFooter: typeof import("../components/ui/card/index")['CardFooter']
 export const Button: typeof import("../components/ui/button/index")['Button']
 export const DropdownMenuPortal: typeof import("../components/ui/dropdown-menu/index")['DropdownMenuPortal']
 export const DropdownMenu: typeof import("../components/ui/dropdown-menu/index")['DropdownMenu']
@@ -233,12 +239,6 @@ export const DropdownMenuLabel: typeof import("../components/ui/dropdown-menu/in
 export const DropdownMenuSub: typeof import("../components/ui/dropdown-menu/index")['DropdownMenuSub']
 export const DropdownMenuSubTrigger: typeof import("../components/ui/dropdown-menu/index")['DropdownMenuSubTrigger']
 export const DropdownMenuSubContent: typeof import("../components/ui/dropdown-menu/index")['DropdownMenuSubContent']
-export const Card: typeof import("../components/ui/card/index")['Card']
-export const CardHeader: typeof import("../components/ui/card/index")['CardHeader']
-export const CardTitle: typeof import("../components/ui/card/index")['CardTitle']
-export const CardDescription: typeof import("../components/ui/card/index")['CardDescription']
-export const CardContent: typeof import("../components/ui/card/index")['CardContent']
-export const CardFooter: typeof import("../components/ui/card/index")['CardFooter']
 export const Input: typeof import("../components/ui/input/index")['Input']
 export const Sheet: typeof import("../components/ui/sheet/index")['Sheet']
 export const SheetTrigger: typeof import("../components/ui/sheet/index")['SheetTrigger']
@@ -307,6 +307,12 @@ export const LazyBreadcrumbLink: LazyComponent<typeof import("../components/ui/b
 export const LazyBreadcrumbList: LazyComponent<typeof import("../components/ui/breadcrumb/index")['BreadcrumbList']>
 export const LazyBreadcrumbPage: LazyComponent<typeof import("../components/ui/breadcrumb/index")['BreadcrumbPage']>
 export const LazyBreadcrumbSeparator: LazyComponent<typeof import("../components/ui/breadcrumb/index")['BreadcrumbSeparator']>
+export const LazyCard: LazyComponent<typeof import("../components/ui/card/index")['Card']>
+export const LazyCardHeader: LazyComponent<typeof import("../components/ui/card/index")['CardHeader']>
+export const LazyCardTitle: LazyComponent<typeof import("../components/ui/card/index")['CardTitle']>
+export const LazyCardDescription: LazyComponent<typeof import("../components/ui/card/index")['CardDescription']>
+export const LazyCardContent: LazyComponent<typeof import("../components/ui/card/index")['CardContent']>
+export const LazyCardFooter: LazyComponent<typeof import("../components/ui/card/index")['CardFooter']>
 export const LazyButton: LazyComponent<typeof import("../components/ui/button/index")['Button']>
 export const LazyDropdownMenuPortal: LazyComponent<typeof import("../components/ui/dropdown-menu/index")['DropdownMenuPortal']>
 export const LazyDropdownMenu: LazyComponent<typeof import("../components/ui/dropdown-menu/index")['DropdownMenu']>
@@ -323,12 +329,6 @@ export const LazyDropdownMenuLabel: LazyComponent<typeof import("../components/u
 export const LazyDropdownMenuSub: LazyComponent<typeof import("../components/ui/dropdown-menu/index")['DropdownMenuSub']>
 export const LazyDropdownMenuSubTrigger: LazyComponent<typeof import("../components/ui/dropdown-menu/index")['DropdownMenuSubTrigger']>
 export const LazyDropdownMenuSubContent: LazyComponent<typeof import("../components/ui/dropdown-menu/index")['DropdownMenuSubContent']>
-export const LazyCard: LazyComponent<typeof import("../components/ui/card/index")['Card']>
-export const LazyCardHeader: LazyComponent<typeof import("../components/ui/card/index")['CardHeader']>
-export const LazyCardTitle: LazyComponent<typeof import("../components/ui/card/index")['CardTitle']>
-export const LazyCardDescription: LazyComponent<typeof import("../components/ui/card/index")['CardDescription']>
-export const LazyCardContent: LazyComponent<typeof import("../components/ui/card/index")['CardContent']>
-export const LazyCardFooter: LazyComponent<typeof import("../components/ui/card/index")['CardFooter']>
 export const LazyInput: LazyComponent<typeof import("../components/ui/input/index")['Input']>
 export const LazySheet: LazyComponent<typeof import("../components/ui/sheet/index")['Sheet']>
 export const LazySheetTrigger: LazyComponent<typeof import("../components/ui/sheet/index")['SheetTrigger']>
