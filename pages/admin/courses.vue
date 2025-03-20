@@ -179,14 +179,14 @@ const selectedLevel = ref('all')
 const courses = ref([
   {
     id: 1,
-    title: '現代舞入門基礎',
-    description: '適合初學者的現代舞入門課程，學習基本姿勢、動作和表現技巧。',
+    title: '韓舞教學',
+    description: '適合初學者的舞蹈入門課程，學習基本姿勢、動作和表現技巧。',
     instructor: '李明儀 講師',
     level: 'beginner',
     category: 'dance',
     duration: '8 小時',
     studentsCount: 152,
-    thumbnail: 'https://images.unsplash.com/photo-1535525153412-5a42439a210d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80',
+    thumbnail: '/image/toobad.jpg',
   },
   {
     id: 2,
@@ -290,24 +290,22 @@ const getLevelVariant = (level: string) => {
 
 /* Sidebar Styles */
 .sidebar {
+  flex: 0 0 auto; /* 不伸縮，保持原始大小 */
   height: 100%;
+  transition: width 0.3s ease;
   z-index: 10;
 }
 
 .navbar {
   height: 100%;
-  background: rgba(26, 26, 46, 0.9);
+  /* background: rgba(26, 26, 46, 0.9); */
   overflow: hidden;
   transition: width 0.3s ease;
-  width: 52px;
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: 20;
+  width: 52px; /* 摺疊時的寬度 */
 }
 
 .sidebar.open .navbar {
-  width: 240px;
+  width: 240px; /* 展開時的寬度 */
 }
 
 .navbar-inner {
@@ -588,7 +586,7 @@ const getLevelVariant = (level: string) => {
   
   .navbar {
     width: 100%;
-    height: 60px;
+    height: auto;
   }
   
   .sidebar.open .navbar {
