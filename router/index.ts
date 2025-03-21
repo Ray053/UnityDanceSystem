@@ -25,22 +25,22 @@ const router = createRouter({
         {
           path: 'courses',
           name: 'courses',
-          component: () => import('../pages/CoursesPage.vue')
+          component: () => import('../pages/admin/courses.vue')
         },
         {
           path: 'learning-history',
           name: 'learning-history',
-          component: () => import('../pages/LearningHistoryPage.vue')
+          component: () => import('../pages/admin/LearningHistoryPage.vue')
         },
         {
           path: 'motion-analysis',
           name: 'motion-analysis',
-          component: () => import('../pages/MotionAnalysisPage.vue')
+          component: () => import('../pages/admin/MotionAnalysisPage.vue')
         },
         {
           path: 'user-management',
           name: 'user-management',
-          component: () => import('../pages/UserManagementPage.vue')
+          component: () => import('../pages/admin/UserManagementPage.vue')
         }
       ]
     },

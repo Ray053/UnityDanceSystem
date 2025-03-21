@@ -1,6 +1,4 @@
-.sidebar.open ~ .main-content {
-  padding-left: 264px; /* 240px navbar width + 24px padding */
-}<template>
+<template>
   <div class="courses-container">
     <!-- Unity Background (This would be your Unity WebGL canvas) -->
     <div class="unity-background">
@@ -130,7 +128,13 @@
               </CardContent>
               
               <CardFooter>
-                <Button class="enroll-btn">開始學習</Button>
+                <!-- 針對第一個課程（韓舞教學）添加導航功能 -->
+                <Button 
+                  class="enroll-btn" 
+                  @click="goToCourseDetail(course.id)"
+                >
+                  開始學習
+                </Button>
               </CardFooter>
             </Card>
           </div>
@@ -142,6 +146,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
+import { useRouter } from 'vue-router'
 import { 
   Search, 
   BookOpen,
@@ -158,6 +163,9 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Badge } from '@/components/ui/badge'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 
+// 使用 router 進行導航
+const router = useRouter()
+
 // Sidebar state
 const isSidebarCollapsed = ref(true)
 const activeMenu = ref('courses')
@@ -168,6 +176,11 @@ const toggleSidebar = () => {
 
 const setActiveMenu = (menu: string) => {
   activeMenu.value = menu
+}
+
+// 導航到課程詳情頁面
+const goToCourseDetail = (courseId: number) => {
+  router.push(`/courses/${courseId}`)
 }
 
 // Course filtering
@@ -181,7 +194,7 @@ const courses = ref([
     id: 1,
     title: '韓舞教學',
     description: '適合初學者的舞蹈入門課程，學習基本姿勢、動作和表現技巧。',
-    instructor: '李明儀 講師',
+    instructor: '周逸凡 講師',
     level: 'beginner',
     category: 'dance',
     duration: '8 小時',
@@ -308,6 +321,11 @@ const getLevelVariant = (level: string) => {
   width: 240px; /* 展開時的寬度 */
 }
 
+/* 側邊欄展開時，主內容區域左側內邊距調整 */
+.sidebar.open ~ .main-content {
+  padding-left: 264px; /* 240px navbar width + 24px padding */
+}
+
 .navbar-inner {
   position: relative;
   height: 100%;
@@ -426,6 +444,7 @@ const getLevelVariant = (level: string) => {
   padding: 24px;
   overflow-y: auto;
   height: 100%;
+  transition: padding-left 0.3s ease;
 }
 
 /* Content Header */
@@ -611,6 +630,11 @@ const getLevelVariant = (level: string) => {
   
   .courses-grid {
     grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  }
+  
+  /* 響應式時調整側邊欄展開後的主內容區域 */
+  .sidebar.open ~ .main-content {
+    padding-left: 24px;
   }
 }
 </style>

@@ -16,11 +16,11 @@ import {
     Users2,
 } from 'lucide-vue-next'
 
-import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
+import { Badge } from '../components/ui/badge'
+import { Button } from '../components/ui/button'
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '../components/ui/card'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
-import { Input } from '@/components/ui/input'
+import { Input } from '../components/ui/input'
 import {
     Breadcrumb,
     BreadcrumbItem,
@@ -28,8 +28,8 @@ import {
     BreadcrumbList,
     BreadcrumbPage,
     BreadcrumbSeparator,
-} from '@/components/ui/breadcrumb'
-import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
+} from '../components/ui/breadcrumb'
+import { Sheet, SheetContent, SheetTrigger } from '../components/ui/sheet'
 import {
     Table,
     TableBody,
@@ -37,23 +37,22 @@ import {
     TableHead,
     TableHeader,
     TableRow,
-} from '@/components/ui/table'
+} from '../components/ui/table'
 import {
     Tabs,
     TabsContent,
     TabsList,
     TabsTrigger,
-} from '@/components/ui/tabs'
+} from '../components/ui/tabs'
 import {
     Tooltip,
     TooltipContent,
     TooltipProvider,
     TooltipTrigger,
-} from '@/components/ui/tooltip'
+} from '../components/ui/tooltip'
 import { Icon } from '@iconify/vue'
-const colorMode = useColorMode()
 
-import { useRouter } from 'vue-router'
+const colorMode = useColorMode()
 
 const router = useRouter()
 
